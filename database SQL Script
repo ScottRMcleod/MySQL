@@ -1,0 +1,286 @@
+DROP DATABASE IF EXISTS `ScottmDB`;
+
+create database ScottmDB;
+
+			use ScottmDB;
+
+			DROP TABLE IF EXISTS `auth_users`;
+
+			create table auth_users( user_id int not null primary key auto_increment,
+
+						user_title varchar(20),
+
+						user_firstname varchar(30),
+
+						user_lastname varchar(30),
+
+						user_forumname varchar(75) unique not null, 
+
+						DOB_month date,
+
+						DOB_year date, 
+
+						DOB_day date,
+
+						user_address varchar(100),
+
+						user_city varchar(20),
+
+						user_state varchar(3),
+
+						user_country varchar(15),
+
+						user_post varchar(4),
+
+						user_password varchar(150),
+
+						user_admin varchar(1),
+
+						user_email varchar(100) unique not null,
+
+						user_comment text, 
+
+						user_since datetime,
+
+						user_signature text,
+
+						timestamp datetime default '0000-00-00 00:00:00'
+
+	not null,
+
+						user_image varchar(100)
+
+			);
+
+			INSERT INTO auth_users (user_id, user_title, user_firstname, user_lastname, user_forumname, user_address, user_city, user_state, user_country, user_post, user_password, user_admin, user_email, user_comment, user_since, user_signature, timestamp)
+
+VALUES ( '', 'Administrator', 'Admin', 'admin', 'Admin', '00 Street', 'City', 'State', 'country', '0000', 'password', 'Y', 'admin@domain.com', 'This is the Administrators Account Please edit this feild first', now(),'Administrator', '2003-
+
+12-11 17:29:25');
+
+			DROP TABLE IF EXISTS `forum_topics`;
+
+			create table forum_topics( topic_id int not null primary key auto_increment,
+
+				topic_title varchar(150), topic_create_time datetime,
+
+				topic_owner varchar(150)
+
+			);
+			DROP TABLE IF EXISTS `page_links`;
+
+			create table page_links( Link_id int not null primary key auto_increment,
+
+				link_title varchar(150),
+
+				link_page varchar(150)
+
+			);
+
+			DROP TABLE IF EXISTS `forum_posts`;
+
+			create table forum_posts( post_id int not null primary key auto_increment,
+
+				topic_id int not null, post_text text,
+
+				post_create_time datetime, post_owner varchar(150)
+
+			);
+
+			DROP TABLE IF EXISTS `store_cats`;
+
+			create table store_cats( id int not null primary key auto_increment,
+
+				cat_title varchar(50) unique, cat_desc text
+
+			);
+
+			DROP TABLE IF EXISTS `store_items`;
+
+			create table store_items( id int not null primary key auto_increment,
+
+				cat_id int not null, item_title varchar(75),
+
+				item_price float(8,2), item_desc text, item_image varchar(50),
+
+				timestamp datetime default '0000-00-00 00:00:00'
+
+	not null,
+
+				manufactor varchar(150)
+
+			);
+
+			DROP TABLE IF EXISTS `store_item_size`;
+
+			create table store_item_size( item_id int not null,
+
+			 item_size varchar(25)
+
+			);
+
+			DROP TABLE IF EXISTS `store_item_color`;
+
+			create table store_item_color(
+
+				item_id int not null,
+
+				item_color varchar(25)
+
+			);
+
+			DROP TABLE IF EXISTS `store_shoppertracker`;
+
+			create table store_shoppertracker( id int not null primary key auto_increment,
+
+				session_id varchar(32), sel_item_id int,
+
+				sel_item_qty smallint, sel_item_size varchar(25),
+
+				sel_item_color varchar(25), date_added datetime
+
+			);
+
+			DROP TABLE IF EXISTS `store_orders`;
+
+			create table store_orders( id int not null primary key auto_increment,
+
+				order_date datetime, order_name varchar(100),
+
+				order_address varchar(255), order_city varchar(50),
+
+				order_state char(3), order_zip varchar(10),
+
+				order_tel varchar(25), order_email varchar(100),
+
+				item_total float(6,2), shipping_total float(6,2),
+
+				autherisation varchar(50), status enum('processed','pending')
+
+			);
+
+			DROP TABLE IF EXISTS `store_order_items`;
+
+			create table store_order_items( id int not null primary key auto_increment,
+
+				order_id int, sel_item_id int,
+
+				sel_item_qty smallint, sel_item_size varchar(25),
+
+				sel_item_color varchar(25), sel_item_price float(6,2)
+
+			);
+
+			DROP TABLE IF EXISTS `calendar_events`;
+
+			create table calendar_events(
+
+				id int not null primary key auto_increment,
+
+				event_title varchar (25), event_shortdec varchar(255),
+
+				event_start datetime
+
+			);
+
+			DROP TABLE IF EXISTS `master_name`;
+
+			create table master_name(
+
+				id int not null primary key auto_increment,
+
+				date_added DATETIME,
+
+				date_modified DATETIME,
+
+				f_name varchar(75),
+
+				l_name varchar(75)
+
+			);
+
+			DROP TABLE IF EXISTS `address`;
+
+			create table address(
+
+				id int not null primary key auto_increment,
+
+				master_id int not null,
+
+				date_added DATETIME,
+
+				date_modified DATETIME
+
+			);
+
+			DROP TABLE IF EXISTS `telphone`;
+
+			create table telphone(
+
+				id int not null primary key auto_increment,
+
+				master_id int not null,
+
+				date_added DATETIME,
+
+				date_modified DATETIME
+
+			);
+
+			DROP TABLE IF EXISTS `sitePages`;
+
+			create table sitePages
+
+			(
+
+				pageId int not null primary key auto_increment,
+
+				pageTitle varchar(50),
+
+				pageType varchar(150),
+
+				pageStyle varchar(150),
+
+				pageColour varchar(50),
+
+				pageImage varchar(50),
+
+				pageContents text,
+
+				timestamp datetime default '0000-00-00 00:00:00'
+
+	not null
+
+			);
+
+			DROP TABLE IF EXISTS `sites`;
+
+			create table sites
+
+			(
+
+				siteID int not null primary key auto_increment,
+
+				siteTitle varchar(50),
+
+				siteType varchar(50),
+
+				sitePages int not null,
+
+				timestamp datetime default '0000-00-00 00:00:00'
+
+	not null,
+
+				siteStyle varchar(150),
+
+				siteNavigation varchar(50),
+
+				numOfPages char(1),
+
+				HeaderColour varchar(7),
+
+				pageContents text
+
+			);
+
+			
