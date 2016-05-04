@@ -1,0 +1,72 @@
+function openDB()
+ {
+			global $conn, $username,$host,$password,$db;
+			$host = "localhost";
+			$username ="*********";
+			$password= "*******";
+			$db = "********";
+			$conn = mysql_connect($host, $username,$password) or die(mysql_error());
+			mysql_select_db($db,$conn) or die(mysql_error());
+}  
+function closeDB()
+{
+	global $conn;
+	mysql_close($conn);
+}
+function mainNav() 
+{
+	//creates connection to the database
+	openDB();	
+		$result = mysql_query("select * from main_nav_table");
+		echo"<ul>";
+		//first pass through the main nave table to collect all feilds in table
+		while($rows=mysql_fetch_array($result))
+		{	
+			$mainNav_id = $rows['main_nav_id'];
+			$mainNave_title = $rows['main_nav_title'];
+			$main_item_type = $rows['main_item_type'];
+			
+			//allocates li objects in page to the active class see ../styles/styles2.css
+			echo"<li class='active'>";
+			// first nested If Statement to select all the fields of main_nav_table 
+			//with a value of dropDownMenu as Y and checks to  
+			if($rows['dropDownMenu'] == "Y" && $rows['main_item_type']  != "Service")
+			{
+				echo"<li class='active'>
+					<a href=".$rows['main_nav_link'].">".$rows['main_nav_title']."</a><ul>";
+					$result2 = mysql_query("select * from drop_down_menu_table1 where menu_item_type ='Product'");
+					
+				while($rows2=mysql_fetch_array($result2))
+				{
+					$subNav_id = $rows2['dropNode1_id'];
+					$subNave_title = $rows2['dropNode1_title'];
+					echo"<li><a href=".$rows2['dropNode1_link'].">
+					".$rows2['dropNode1_title']."</a></li>";
+				}
+				echo"</ul>";
+				
+			}
+			if ($rows['dropDownMenu'] == "Y" && $rows['main_item_type']  == "Service")
+			{ 
+				echo"<li class='active'>
+					<a href=".$rows['main_nav_link'].">".$rows['main_nav_title']."</a><ul>";
+					$result3 = mysql_query("select * from drop_down_menu_table2 where menu_item_type ='Service'");
+					
+				while($rows2=mysql_fetch_array($result3))
+				{
+					$subNav_id = $rows2['dropNode2_id'];
+					$subNave_title = $rows2['dropNode2_title'];
+					echo"<li><a href=".$rows2['dropNode2_link'].">
+					".$rows2['dropNode2_title']."</a></li>";
+				}
+				echo"</ul>";
+			}
+			if($rows['dropDownMenu'] == "N")
+			{
+				echo"
+				<li><a href=".$rows['main_nav_link'].">".$rows['main_nav_title']."</a></li>";
+			}
+		}
+		echo"</ul>";
+	closeDB();
+}Enter file contents here
